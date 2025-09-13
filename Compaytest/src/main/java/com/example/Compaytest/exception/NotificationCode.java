@@ -3,7 +3,8 @@ package com.example.Compaytest.exception;
 public enum NotificationCode {
     // login
     AUTH_LOGIN_SUCCESS("AUTH_001", "Đăng nhập thành công"),
-    AUTH_LOGIN_FAIL("AUTH_002", "Email hoặc mật khẩu không đúng"),
+    AUTH_LOGIN_FAIL("AUTH_002", "Tài khoản hoặc mật khẩu không đúng"),
+    AUTH_LOGIN_NULL("AUTH_003","Username và password không được để trống"),
 
     // logout
     AUTH_LOGOUT_SUCCESS("AUTH_OUT_001", "Đăng xuất thành công"),

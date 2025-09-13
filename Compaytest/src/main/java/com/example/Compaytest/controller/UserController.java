@@ -44,6 +44,14 @@ public class UserController {
 
     @PostMapping("/login")
     public ResponseEntity<?> dangNhap(@RequestBody LoginRequest loginRequest) {
+        // Check username/password trống
+        if (loginRequest.getUsername() == null || loginRequest.getUsername().isBlank() ||
+                loginRequest.getPassword() == null || loginRequest.getPassword().isBlank()) {
+            return ResponseEntity
+                    .badRequest()
+                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_NULL));
+        }
+
         try {
             UsernamePasswordAuthenticationToken authToken =
                     new UsernamePasswordAuthenticationToken(loginRequest.getUsername(), loginRequest.getPassword());
@@ -52,18 +60,16 @@ public class UserController {
             String token = jwtService.generateToken(userDetails.getUsername());
             return ResponseEntity.ok(ServiceResponse.success(NotificationCode.AUTH_LOGIN_SUCCESS, token));
         } catch (BadCredentialsException ex) {
-            // Sai mật khẩu
             logger.warn("Login failed: bad credentials - " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL));
-
+                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL ));
         } catch (Exception ex) {
-            // Bắt tất cả lỗi khác
             logger.warn("Login failed: unexpected error - " + ex.getMessage());
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL));
+                    .body(ServiceResponse.error(NotificationCode.AUTH_LOGIN_FAIL ));
         }
     }
+
 
 
     @PostMapping("/logout")
